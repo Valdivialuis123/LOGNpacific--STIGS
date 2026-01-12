@@ -1,0 +1,50 @@
+sYNOPSIS
+    The Windows Installer feature "Always install with elevated privileges" must be disabled.
+
+
+.NOTES
+    Author          : Luis Valdivia
+    LinkedIn        : https://www.linkedin.com/in/lvaldivia123/
+    GitHub          : https://github.com/Valdivialuis123
+    Date Created    : 2026-12-01
+    Last Modified   : 2026-12-01
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID         : WN11-CC-000315 
+
+.TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : 
+
+.USAGE
+    Put any usage instructions here.
+    Example syntax:
+    PS C:\> .\__remediation_template(STIG-ID-WN10-AU-000500).ps1 
+#>
+
+# # Fix WN11-CC-000315: Disable AlwaysInstallElevated
+
+# --- HKLM (Computer policy) ---
+if (-not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer")) {
+    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Force | Out-Null
+}
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Name "AlwaysInstallElevated" -Type DWord -Value 0
+
+# --- HKCU (User policy) ---
+if (-not (Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Installer")) {
+    New-Item -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Force | Out-Null
+}
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Name "AlwaysInstallElevated" -Type DWord -Value 0
+
+# --- Verify values ---
+"HKLM value:"; Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Name AlwaysInstallElevated
+"HKCU value:"; Get-ItemProperty -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Installer" -Name AlwaysInstallElevated
+
+Write-Host "`nWN11-CC-000315 remediation complete. Reboot the system for changes to take effect."
+
+
+
+
