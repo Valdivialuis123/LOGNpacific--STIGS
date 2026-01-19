@@ -1,0 +1,32 @@
+Author          : Luis Valdivia
+    LinkedIn        : https://www.linkedin.com/in/lvaldivia123/
+    GitHub          : https://github.com/Valdivialuis123
+    Date Created    : 2026-19-01
+    Last Modified   : 2026-19-01
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID        WN11-SO-000010
+TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+   PowerShell Ver. : PowerShell 5.1
+
+synopsis -A system faces an increased vulnerability threat if the built-in guest account is not disabled. This account is a known account that exists on all Windows systems and cannot be deleted. This account is initialized during the installation of the operating system with no password assigned.
+
+CODE: # Disable the built-in Guest account
+Try {
+    $guest = Get-LocalUser -Name "Guest"
+    
+    if ($guest.Enabled -eq $true) {
+        Disable-LocalUser -Name "Guest"
+        Write-Output "Guest account has been disabled successfully."
+    }
+    else {
+        Write-Output "Guest account is already disabled."
+    }
+}
+Catch {
+    Write-Error "Guest account not found or an error occurred."
+}
