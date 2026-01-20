@@ -1,0 +1,40 @@
+
+
+Author          : Luis Valdivia
+    LinkedIn        : https://www.linkedin.com/in/lvaldivia123/
+    GitHub          : https://github.com/Valdivialuis123
+    Date Created    : 2026-20-01
+    Last Modified   : 2026-20-01
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID      WN11-CC-000068
+TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : PowerShell 5.1
+
+Sypnosis :
+Description
+An exportable version of credentials is provided to remote hosts when using credential delegation which exposes them to theft on the remote host. 
+Restricted Admin mode or Remote Credential Guard allow delegation of non-exportable credentials providing additional protection of the credentials.
+ Enabling this configures the host to support Restricted Admin mode or Remote Credential Guard.
+
+
+Manual Solution
+Configure the policy value for Computer Configuration >> Administrative Templates >> System >> Credentials Delegation >> 'Remote host allows delegation of non-exportable credentials' to 'Enabled'.
+
+CODE:
+WN11-CC-000068 – Remote host allows delegation of non-exportable credentials
+$path = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\CredentialsDelegation'
+
+if (-not (Test-Path $path)) {
+    New-Item -Path $path -Force | Out-Null
+}
+
+New-ItemProperty -Path $path `
+                 -Name 'AllowProtectedCreds' `
+                 -PropertyType DWord `
+                 -Value 1 `
+                 -Force
