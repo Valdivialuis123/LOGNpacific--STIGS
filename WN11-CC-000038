@@ -1,0 +1,28 @@
+Author          : Luis Valdivia
+    LinkedIn        : https://www.linkedin.com/in/lvaldivia123/
+    GitHub          : https://github.com/Valdivialuis123
+    Date Created    : 2026-20-01
+    Last Modified   : 2026-20-01
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID        WN11-CC-000038
+TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : PowerShell 5.1
+
+Synopsis: his STIG control requires that the WDigest Authentication protocol be disabled on Windows 11 systems.
+WDigest, if enabled, causes plaintext user credentials to be stored in the Local Security Authority Subsystem Service (LSASS),
+which could allow an attacker who gains access to LSASS memory to steal credentials. 
+In Windows 11 WDigest is disabled by default, but this STIG ensures that configuration is explicitly enforced. 
+
+CODE:
+Write-Host "Starting Windows 11 STIG remediation..." -ForegroundColor Cyan
+
+# 2. WN11-CC-000038 - Disable WDigest authentication
+New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest" -Force | Out-Null
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\WDigest" `
+-Name UseLogonCredential -Type DWord -Value 0
+Write-Host "WN11-CC-000038 fixed (reboot recommended)" -ForegroundColor Green
