@@ -1,0 +1,40 @@
+
+Author          : Luis Valdivia
+    LinkedIn        : https://www.linkedin.com/in/lvaldivia123/
+    GitHub          : https://github.com/Valdivialuis123
+    Date Created    : 2026-20-01
+    Last Modified   : 2026-20-01
+    Version         : 1.0
+    CVEs            : N/A
+    Plugin IDs      : N/A
+    STIG-ID      WN11-CC-000060 
+TESTED ON
+    Date(s) Tested  : 
+    Tested By       : 
+    Systems Tested  : 
+    PowerShell Ver. : PowerShell 5.1
+Syponosis: Block connections to non-domain networks when on a domain
+
+Manual Solution: Configure the policy value for Computer Configuration >> Administrative Templates >> Network >> Windows Connection Manager >> 'Prohibit connection to non-domain networks when connected to domain authenticated network' to 'Enabled'.
+
+Code:
+# WN11-CC-000060 – Block connections to non-domain networks when on a domain
+# HKLM\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy\fBlockNonDomain = 1 (REG_DWORD)
+# Requires: Run PowerShell ISE as Administrator
+
+$RegPath = 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WcmSvc\GroupPolicy'
+
+# Create the registry key if it doesn't exist
+if (-not (Test-Path $RegPath)) {
+    New-Item -Path $RegPath -Force | Out-Null
+}
+
+# Set the registry value
+New-ItemProperty -Path $RegPath `
+                 -Name 'fBlockNonDomain' `
+                 -PropertyType DWord `
+                 -Value 1 `
+                 -Force | Out-Null
+
+# Verify
+Get-ItemProperty -Path $RegPath -Name 'fBlockNonDomain'
